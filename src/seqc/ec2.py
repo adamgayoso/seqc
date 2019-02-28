@@ -23,7 +23,7 @@ log.logging.getLogger('paramiko').setLevel(log.logging.CRITICAL)
 log.logging.getLogger('boto3').setLevel(log.logging.CRITICAL)
 
 # set default values for a few parameters
-IMAGE_ID = 'ami-8927f1f3'
+IMAGE_ID = 'ami-0ec7bdcaed4bf87d0'
 
 
 def _get_ec2_configuration():
