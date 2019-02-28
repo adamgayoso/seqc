@@ -847,3 +847,56 @@ class ten_x_v2(AbstractPlatform):
 
         """
         rmt_correction.in_drop(ra, error_rate=0.02)
+
+class m_scape(AbstractPlatform):
+    # M-SCAPE chemistry
+
+    def __init__(self):
+        AbstractPlatform.__init__(self, [8])
+
+    def primer_length(self):
+        """The appropriate value is used to approximate the min_poly_t for each platform.
+        :return: appropriate primer length for 10X
+        """
+        return 18
+
+    def merge_function(self, g, b):
+        """
+        merge forward and reverse M-SCAPE reads, annotating the reverse read
+        (containing genomic information) with the rmt from the forward read.
+        Pool is left empty, and the cell barcode is obtained from the
+        forward read.
+
+        :param g: genomic fastq sequence data
+        :param b: barcode fastq sequence data
+        :return: annotated genomic sequence.
+        """
+        combined = b.sequence.strip()
+        cell = combined[0:8]  # v2 chemistry has 8bp barcodes
+        rmt = combined[8:18]  # 10 baselength RMT
+        poly_t = combined[18:]
+        g.add_annotation((b'', cell, rmt, poly_t))
+        return g
+
+    def apply_barcode_correction(self, ra, barcode_files):
+        """
+        Apply barcode correction and return error rate
+
+        :param ra: Read array
+        :param barcode_files: Valid barcodes files
+        :returns: Error rate table
+
+        """
+        # todo: verify max edit distance
+        error_rate = barcode_correction.ten_x_barcode_correction(ra, self, barcode_files, max_ed=1)
+        return error_rate
+
+    def apply_rmt_correction(self, ra, error_rate):
+        """
+        Apply RMT correction
+
+        :param ra: Read array
+        :param error_rate: Error rate table from apply_barcode_correction
+
+        """
+        rmt_correction.in_drop(ra, error_rate=0.02)
