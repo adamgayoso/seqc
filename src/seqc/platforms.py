@@ -888,7 +888,7 @@ class m_scape(AbstractPlatform):
 
         """
         # todo: verify max edit distance
-        error_rate = barcode_correction.ten_x_barcode_correction(ra, self, barcode_files, max_ed=1)
+        error_rate = barcode_correction.ten_x_barcode_correction(ra, self, barcode_files, max_ed=2)
         return error_rate
 
     def apply_rmt_correction(self, ra, error_rate):
