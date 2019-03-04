@@ -49,6 +49,8 @@ class AbstractPlatform:
             return ten_x()
         if type == "ten_x_v2":
             return ten_x_v2()
+        if type == "m_scape":
+            return m_scape()
 
     @property
     def num_barcodes(self):
@@ -847,6 +849,7 @@ class ten_x_v2(AbstractPlatform):
 
         """
         rmt_correction.in_drop(ra, error_rate=0.02)
+
 
 class m_scape(AbstractPlatform):
     # M-SCAPE chemistry
