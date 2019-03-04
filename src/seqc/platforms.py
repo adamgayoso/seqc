@@ -855,7 +855,7 @@ class m_scape(AbstractPlatform):
     # M-SCAPE chemistry
 
     def __init__(self):
-        AbstractPlatform.__init__(self, [8])
+        AbstractPlatform.__init__(self, [8], False, False)
 
     def primer_length(self):
         """The appropriate value is used to approximate the min_poly_t for each platform.
