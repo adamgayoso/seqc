@@ -241,7 +241,9 @@ def run(args) -> None:
         # check if the platform name provided is supported by seqc
         # todo move into verify for run
         platform_name = verify.platform_name(args.platform)
+        log.notify('Platform name: {}'.format(platform_name))
         platform = platforms.AbstractPlatform.factory(platform_name)  # returns platform
+        log.notify('Platform verification: {}'.format(platform))
 
         n_processes = multiprocessing.cpu_count() - 1  # get number of processors
 
@@ -366,11 +368,13 @@ def run(args) -> None:
 
         # Summary sections
         # create the sections for the summary object
+        log.info('Creating summary files.')
         sections += [
             Section.from_cell_filtering(cell_filter_figure, 'cell_filtering.html'),
             Section.from_run_time(args.log_name, 'seqc_log.html')]
 
         # get alignment summary
+        log.info('Creating alignment summary.')
         if os.path.isfile(output_dir + '/alignments/Log.final.out'):
             os.rename(output_dir + '/alignments/Log.final.out',
                       output_dir + '/' + args.output_prefix + '_alignment_summary.txt')
@@ -394,25 +398,26 @@ def run(args) -> None:
         summary_archive = seqc_summary.compress_archive()
         files += [summary_archive]
 
-        # Create a mini summary section
-        alignment_summary_file = output_dir + '/' + args.output_prefix + '_alignment_summary.txt'
-        seqc_mini_summary = MiniSummary(
-            args.output_prefix, mini_summary_d, alignment_summary_file, cell_filter_figure,
-            cell_size_figure)
-        seqc_mini_summary.compute_summary_fields(ra, sp_csv)
-        seqc_mini_summary_json, seqc_mini_summary_pdf = seqc_mini_summary.render()
-        files += [seqc_mini_summary_json, seqc_mini_summary_pdf]
+        # # Create a mini summary section
+        # alignment_summary_file = output_dir + '/' + args.output_prefix + '_alignment_summary.txt'
+        # seqc_mini_summary = MiniSummary(
+        #     args.output_prefix, mini_summary_d, alignment_summary_file, cell_filter_figure,
+        #     cell_size_figure)
+        # seqc_mini_summary.compute_summary_fields(ra, sp_csv)
+        # seqc_mini_summary_json, seqc_mini_summary_pdf = seqc_mini_summary.render()
+        # files += [seqc_mini_summary_json, seqc_mini_summary_pdf]
 
         # Running MAST for differential analysis
         # file storing the list of differentially expressed genes for each cluster
-        de_gene_list_file = run_mast(
-            seqc_mini_summary.get_counts_filtered(), seqc_mini_summary.get_clustering_result(),
-            args.output_prefix)
-        files += [de_gene_list_file]
+        # log.info('Running MAST differential expression')
+        # de_gene_list_file = run_mast(
+        #     seqc_mini_summary.get_counts_filtered(), seqc_mini_summary.get_clustering_result(),
+        #     args.output_prefix)
+        # files += [de_gene_list_file]
 
         # adding the cluster column and write down gene-cell count matrix
         dense_csv = args.output_prefix + '_dense.csv'
-        sp_csv.insert(loc=0, column='CLUSTER', value=seqc_mini_summary.get_clustering_result())
+        # sp_csv.insert(loc=0, column='CLUSTER', value=seqc_mini_summary.get_clustering_result())
         sp_csv.to_csv(dense_csv)
         files += [dense_csv]
 
