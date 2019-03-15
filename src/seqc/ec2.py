@@ -23,8 +23,8 @@ log.logging.getLogger('paramiko').setLevel(log.logging.CRITICAL)
 log.logging.getLogger('boto3').setLevel(log.logging.CRITICAL)
 
 # set default values for a few parameters
-IMAGE_ID = 'ami-0ec7bdcaed4bf87d0'
-
+# IMAGE_ID = 'ami-0ec7bdcaed4bf87d0' # N. Virginia
+IMAGE_ID = 'ami-02993d4f5f36d28d6' # N. California
 
 def _get_ec2_configuration():
     """assumes you have awscli and that you have configured it. If so, the default values
