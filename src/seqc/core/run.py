@@ -349,7 +349,7 @@ def run(args) -> None:
         log.info('Creating filtered counts matrix.')
         cell_filter_figure = args.output_prefix +  '_cell_filters.png'
 
-        # By pass low count filter for mars seq
+        # By pass low count filter for mars seq and m-scape
         sp_csv, total_molecules, molecules_lost, cells_lost, cell_description = (
             filter.create_filtered_dense_count_matrix(
                 sp_mols, sp_reads, mini_summary_d, plot=True, figname=cell_filter_figure,

@@ -902,4 +902,4 @@ class m_scape(AbstractPlatform):
         :param error_rate: Error rate table from apply_barcode_correction
 
         """
-        rmt_correction.in_drop(ra, error_rate=0.02)
+        rmt_correction.in_drop(ra, error_rate=0.02, alpha=0.10)
